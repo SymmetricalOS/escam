@@ -17,3 +17,8 @@ Update specific package(s): `escam update [package1] <package2> <package3>...`
 Add a repository: `escam add-repository [repository URL]`
 
 Remove a repository: `escam remove-repository [repository URL]`
+
+# Installation
+
+1. Download the shell script for your linux distro from the releases page
+2. Run the shell script
