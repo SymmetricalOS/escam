@@ -9,7 +9,7 @@ import commands.*;
 class Main {
 	static var args = Sys.args();
 
-	public static final version = "0.6.0";
+	public static final version = "0.7.0";
 
 	public static function main() {
 		if (Sys.systemName() == "Mac") {
@@ -42,8 +42,26 @@ class Main {
 			case "host-repository":
 				Commands.execute(new HostRepository());
 			default:
-				Sys.println("Unknown operation: " + args[0]);
-				Sys.println("Run 'escam help' for information");
+				var o = args[0].split("");
+				for (d in o) {
+					switch (d) {
+						case "s":
+							Commands.execute(new Sync());
+						case "u":
+							Commands.execute(new Update());
+						case "i":
+							Commands.execute(new Install());
+						case "r":
+							Commands.execute(new Remove());
+						default:
+							Sys.println("Unknown operation: " + args[0]);
+							Sys.println("Run 'escam help' for information");
+					}
+				}
+				if (o.length == 0) {
+					Sys.println("Unknown operation: " + args[0]);
+					Sys.println("Run 'escam help' for information");
+				}
 		}
 		Sys.println("");
 	}
