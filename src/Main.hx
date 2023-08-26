@@ -23,6 +23,8 @@ class Main {
 				Commands.execute(new Help());
 			case "install", "i":
 				Commands.execute(new Install());
+			case "aur", "a":
+				Commands.execute(new AUR());
 			case "remove", "r":
 				Commands.execute(new Remove());
 			case "update", "u":

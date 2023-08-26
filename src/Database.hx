@@ -16,21 +16,22 @@ class Database {
 			repositories: [
 				{
 					name: "core",
-					url: "http://173.71.190.191:3434/core",
+					url: "http://173.71.190.77:3434/core",
 					packages: [],
 					packagesURL: ""
 				},
 				{
 					name: "community",
-					url: "http://173.71.190.191:3434/community",
+					url: "http://173.71.190.77:3434/community",
 					packages: [],
 					packagesURL: ""
 				}
 			],
 			packages: [{name: "escam", version: Main.version}]
 		};
-		FileSystem.createDirectory("/opt/escam/");
+		FileSystem.createDirectory("/opt/escam/temp/");
 		File.saveContent(path, Json.stringify(db));
+		Sys.command("chmod -R 777 /opt/escam/");
 	}
 
 	public static function get():structs.Database {
