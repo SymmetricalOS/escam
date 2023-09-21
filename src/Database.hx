@@ -8,7 +8,7 @@ import sys.io.File;
 import sys.FileSystem;
 
 class Database {
-	public static final path = "/opt/escam/database.json";
+	public static final path = "/etc/escam/database.json";
 
 	public static function init() {
 		Sys.println("Initializing database");
@@ -29,9 +29,9 @@ class Database {
 			],
 			packages: [{name: "escam", version: Main.version}]
 		};
-		FileSystem.createDirectory("/opt/escam/temp/");
+		FileSystem.createDirectory("/etc/escam/temp/");
 		File.saveContent(path, Json.stringify(db));
-		Sys.command("chmod -R 777 /opt/escam/");
+		Sys.command("chmod -R 777 /etc/escam/");
 	}
 
 	public static function get():structs.Database {
