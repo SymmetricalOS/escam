@@ -87,4 +87,9 @@ class Database {
 
 		return null;
 	}
+
+	public static function getPackages():Array<String> {
+		var f = File.getContent("/etc/escam/pkglist");
+		return f.split("\n");
+	}
 }

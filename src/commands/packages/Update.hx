@@ -1,5 +1,6 @@
 package commands.packages;
 
+import functions.Downloader;
 import sys.io.File;
 import structs.Package;
 import sys.FileSystem;
@@ -11,8 +12,29 @@ import repositories.RepoManager;
 using StringTools;
 
 class Update implements Command {
+	var cp = 0;
+	var tp = 0;
+
 	public function bind(args:Array<String>) {
-		Sys.println("The update command is unavailable. Please remove and install a package to update it.");
+		var list = [];
+		for (pkg in Database.getPackages()) {
+			var np = Downloader.check(pkg.split("=")[0]);
+			if (np.ver != pkg.split("=")[1]) {
+				list.push(np);
+			}
+		}
+
+		if (list.length == 0)
+			return;
+		Sys.print('Packages to update (${list.length}): ');
+		for (pkg in list) {
+			Sys.print('${pkg.pkg}-${pkg.ver} ');
+		}
+		Sys.print("\r\n\r\nProceed with update? [Y/n] ");
+		var confirm = Sys.stdin().readLine();
+		if (!confirm.toLowerCase().contains("y") && confirm.toLowerCase().length > 0)
+			return;
+
 		// var summary = [];
 
 		// if (args.length > 1) {
