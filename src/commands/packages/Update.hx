@@ -24,16 +24,55 @@ class Update implements Command {
 			}
 		}
 
-		if (list.length == 0)
+		if (list.length == 0) {
+			Sys.println("System is up-to-date");
 			return;
-		Sys.print('Packages to update (${list.length}): ');
+		}
+		Sys.print('Packages to upgrade (${list.length}): ');
 		for (pkg in list) {
 			Sys.print('${pkg.pkg}-${pkg.ver} ');
 		}
-		Sys.print("\r\n\r\nProceed with update? [Y/n] ");
+		Sys.print("\r\n\r\nProceed with upgrade? [Y/n] ");
 		var confirm = Sys.stdin().readLine();
 		if (!confirm.toLowerCase().contains("y") && confirm.toLowerCase().length > 0)
 			return;
+
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Removing old packages");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) Removing ${pkg.pkg}');
+			var dat:{depends:Array<String>, files:Array<String>, dirs:Array<String>} = Json.parse(File.getContent('/etc/escam/packages/${pkg.pkg}.dat'));
+
+			for (file in dat.files) {
+				FileSystem.deleteFile(file);
+			}
+
+			for (dir in dat.dirs) {
+				FileSystem.deleteDirectory(dir);
+			}
+
+			Database.removePackage(pkg.pkg);
+		}
+
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Downloading new packages");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) Downloading ${pkg.pkg}');
+			Downloader.get(pkg);
+		}
+
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Upgrading packages");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) Installing ${pkg.pkg}');
+			Downloader.install(pkg);
+		}
 
 		// var summary = [];
 
