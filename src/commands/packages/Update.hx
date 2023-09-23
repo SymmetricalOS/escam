@@ -12,52 +12,53 @@ using StringTools;
 
 class Update implements Command {
 	public function bind(args:Array<String>) {
-		var summary = [];
+		Sys.println("The update command is unavailable. Please remove and install a package to update it.");
+		// var summary = [];
 
-		if (args.length > 1) {
-			var packages = args;
-			args.shift();
+		// if (args.length > 1) {
+		// 	var packages = args;
+		// 	args.shift();
 
-			for (pkgname in packages) {
-				Sys.println("Checking " + pkgname + " for updates");
-			}
-		} else {
-			Sys.println("Starting full system upgrade");
+		// 	for (pkgname in packages) {
+		// 		Sys.println("Checking " + pkgname + " for updates");
+		// 	}
+		// } else {
+		// 	Sys.println("Starting full system upgrade");
 
-			var packages = Database.get().packages;
-			if (packages.length == 0) {
-				Sys.println("No packages have been installed through escam");
-			}
+		// 	var packages = Database.get().packages;
+		// 	if (packages.length == 0) {
+		// 		Sys.println("No packages have been installed through escam");
+		// 	}
 
-			for (pkg in packages) {
-				var currentver = pkg.version;
-				var latestver = currentver;
+		// 	for (pkg in packages) {
+		// 		var currentver = pkg.version;
+		// 		var latestver = currentver;
 
-				var vjurl = Path.join([RepoManager.findfirst(pkg.name).packagesURL, pkg.name, "versions.json"]);
-				var h1 = new Http(vjurl);
-				h1.onData = function(data:String) {
-					var json = Json.parse(data);
-					latestver = json[json.length - 1];
-					if (currentver != latestver) {
-						Sys.println("Removing " + pkg.name + " " + pkg.version);
-						remove(pkg.name);
-						install(pkg.name);
-						summary.push("UPDATED " + pkg.name);
-					} else {
-						Sys.println(pkg.name + " is up to date");
-					}
-				}
-				h1.onError = function(msg:String) {
-					Sys.println("Error fetching versions: " + msg);
-					summary.push("FAILED " + pkg.name);
-				}
-				h1.request();
-			}
-		}
+		// 		var vjurl = Path.join([RepoManager.findfirst(pkg.name).packagesURL, pkg.name, "versions.json"]);
+		// 		var h1 = new Http(vjurl);
+		// 		h1.onData = function(data:String) {
+		// 			var json = Json.parse(data);
+		// 			latestver = json[json.length - 1];
+		// 			if (currentver != latestver) {
+		// 				Sys.println("Removing " + pkg.name + " " + pkg.version);
+		// 				remove(pkg.name);
+		// 				install(pkg.name);
+		// 				summary.push("UPDATED " + pkg.name);
+		// 			} else {
+		// 				Sys.println(pkg.name + " is up to date");
+		// 			}
+		// 		}
+		// 		h1.onError = function(msg:String) {
+		// 			Sys.println("Error fetching versions: " + msg);
+		// 			summary.push("FAILED " + pkg.name);
+		// 		}
+		// 		h1.request();
+		// 	}
+		// }
 
-		Sys.println("\nTransaction summary:");
-		for (s in summary)
-			Sys.println(s);
+		// Sys.println("\nTransaction summary:");
+		// for (s in summary)
+		// 	Sys.println(s);
 	}
 
 	public function new() {}

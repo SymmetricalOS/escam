@@ -1,5 +1,6 @@
 package;
 
+import functions.Mirrors;
 import commands.packages.*;
 import commands.repositories.*;
 import commands.dev.*;
@@ -9,13 +10,17 @@ import commands.*;
 class Main {
 	static var args = Sys.args();
 
-	public static final version = "0.7.0";
+	public static final version = "0.8.0";
 
 	public static function main() {
 		if (Sys.systemName() == "Mac") {
-			Sys.println("WARNING: MacOS support is EXTREMELY unstable. The package manager is optimized for MacOS however some packages may not work properly and COULD BREAK YOUR SYSTEM.\n\033[1;31mESCAM COMES WITH ABSOLUTELTY NO WARRANTY!!!\033[0m\n");
-			Sys.sleep(5);
+			Sys.println("\033[1;31mWARNING: MacOS is NOT SUPPORTED and NEVER WILL BE!!! Using this on MacOS may cause \033[0m\033[0;101m\033[1;30mSEVERE AND IRREVERSABLE DAMAGE TO YOUR SYSTEM!!!\033[0m");
+			Sys.print("To continue, please type \"Yes, break my system.\": ");
+			var i = Sys.stdin().readLine();
+			if (i != "Yes, break my system.")
+				return;
 		}
+		Mirrors.load();
 		switch (args[0]) {
 			case "version", "v":
 				Commands.execute(new Version());

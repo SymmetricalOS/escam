@@ -1,7 +1,7 @@
 # Maintainer: SidGames5 <sidgamessendmestuff@gmail.com>
 pkgname='escam'
-pkgver='0.7.0'
-pkgrel=1
+pkgver='0.8.0'
+pkgrel=2
 epoch=
 pkgdesc="Extremely simple command-line app manager"
 arch=('x86_64')

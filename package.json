@@ -1,6 +1,6 @@
 {
     "name": "escam",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "scripts":{
         "prepare": "./prepare.sh",
         "build": "haxe build.hxml"
