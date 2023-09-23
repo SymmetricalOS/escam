@@ -35,7 +35,8 @@ class Database {
 
 		FileSystem.createDirectory("/etc/escam/packages/");
 		if (!FileSystem.exists("/etc/escam/mirrors")) {
-			File.saveContent("/etc/escam/mirrors", "http://173.71.190.77:3434/core/$arch");
+			File.saveContent("/etc/escam/mirrors",
+				"http://173.71.190.77:3434/core/$arch\nhttp://173.71.190.77:3434/community/$arch\nhttp://173.71.190.77:3434/extra/$arch");
 		}
 		if (!FileSystem.exists("/etc/escam/pkglist")) {
 			File.saveContent("/etc/escam/pkglist", "escam=" + Main.version);
