@@ -73,5 +73,7 @@ class Downloader {
 		req.request();
 
 		File.saveContent('/etc/escam/packages/${pkg.pkg}.dat', Json.stringify(dat));
+
+		Database.addPackage(pkg);
 	}
 }

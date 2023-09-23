@@ -60,6 +60,8 @@ class Remove implements Command {
 				Sys.println('($sc/$st) Removing directory $dir');
 				FileSystem.deleteDirectory(dir);
 			}
+
+			Database.removePackage(pkg);
 		}
 
 		// var summary = [];

@@ -34,7 +34,12 @@ class Database {
 		// Sys.command("chmod -R 777 /etc/escam/");
 
 		FileSystem.createDirectory("/etc/escam/packages/");
-		File.saveContent("/etc/escam/mirrors", "http://173.71.190.77:3434/core/$arch");
+		if (!FileSystem.exists("/etc/escam/mirrors")) {
+			File.saveContent("/etc/escam/mirrors", "http://173.71.190.77:3434/core/$arch");
+		}
+		if (!FileSystem.exists("/etc/escam/pkglist")) {
+			File.saveContent("/etc/escam/pkglist", "escam=" + Main.version);
+		}
 	}
 
 	public static function get():structs.Database {
@@ -46,5 +51,39 @@ class Database {
 
 	public static function save(data:structs.Database) {
 		File.saveContent(path, Json.stringify(data));
+	}
+
+	public static function addPackage(pkg:{mirror:String, pkg:String, ver:String}) {
+		var f = File.getContent("/etc/escam/pkglist");
+
+		f += "\n" + pkg.pkg + "=" + pkg.ver;
+
+		File.saveContent("/etc/escam/pkglist", f);
+	}
+
+	public static function removePackage(pkg:String) {
+		var f = File.getContent("/etc/escam/pkglist");
+
+		var n = "";
+
+		for (p in f.split("\n")) {
+			if (p.split("=")[0] != pkg) {
+				n += "\n" + p;
+			}
+		}
+
+		File.saveContent("/etc/escam/pkglist", n);
+	}
+
+	public static function getVersion(pkg:String):Null<String> {
+		var f = File.getContent("/etc/escam/pkglist");
+
+		for (p in f.split("\n")) {
+			if (p.split("=")[0] == pkg) {
+				return p.split("=")[1];
+			}
+		}
+
+		return null;
 	}
 }
