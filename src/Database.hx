@@ -11,27 +11,30 @@ class Database {
 	public static final path = "/etc/escam/database.json";
 
 	public static function init() {
-		Sys.println("Initializing database");
-		var db:structs.Database = {
-			repositories: [
-				{
-					name: "core",
-					url: "http://173.71.190.77:3434/core",
-					packages: [],
-					packagesURL: ""
-				},
-				{
-					name: "community",
-					url: "http://173.71.190.77:3434/community",
-					packages: [],
-					packagesURL: ""
-				}
-			],
-			packages: [{name: "escam", version: Main.version}]
-		};
-		FileSystem.createDirectory("/etc/escam/temp/");
-		File.saveContent(path, Json.stringify(db));
-		Sys.command("chmod -R 777 /etc/escam/");
+		// Sys.println("Initializing database");
+		// var db:structs.Database = {
+		// 	repositories: [
+		// 		{
+		// 			name: "core",
+		// 			url: "http://173.71.190.77:3434/core",
+		// 			packages: [],
+		// 			packagesURL: ""
+		// 		},
+		// 		{
+		// 			name: "community",
+		// 			url: "http://173.71.190.77:3434/community",
+		// 			packages: [],
+		// 			packagesURL: ""
+		// 		}
+		// 	],
+		// 	packages: [{name: "escam", version: Main.version}]
+		// };
+		// FileSystem.createDirectory("/etc/escam/temp/");
+		// File.saveContent(path, Json.stringify(db));
+		// Sys.command("chmod -R 777 /etc/escam/");
+
+		FileSystem.createDirectory("/etc/escam/packages/");
+		File.saveContent("/etc/escam/mirrors", "http://173.71.190.77:3434/core/$arch");
 	}
 
 	public static function get():structs.Database {

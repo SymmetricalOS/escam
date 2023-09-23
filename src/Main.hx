@@ -20,6 +20,7 @@ class Main {
 			if (i != "Yes, break my system.")
 				return;
 		}
+		Database.init();
 		Mirrors.load();
 		switch (args[0]) {
 			case "version", "v":
