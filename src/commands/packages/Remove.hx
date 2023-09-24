@@ -1,5 +1,6 @@
 package commands.packages;
 
+import sys.io.Process;
 import sys.FileSystem;
 import haxe.io.Path;
 import sys.io.File;
@@ -58,7 +59,8 @@ class Remove implements Command {
 			for (dir in dat.dirs) {
 				sc++;
 				Sys.println('($sc/$st) Removing directory $dir');
-				FileSystem.deleteDirectory(dir);
+				var p1 = new Process('rm -r $dir');
+				p1.exitCode();
 			}
 
 			Database.removePackage(pkg);

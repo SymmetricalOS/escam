@@ -54,14 +54,16 @@ class Downloader {
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".zip"]);
 		var p1 = new Process('wget $url');
 		p1.exitCode();
-		var p2 = new Process('mv ${pkg.pkg}-${pkg.ver}.zip /');
+		var p2 = new Process('mv ${pkg.pkg}-${pkg.ver}.zip /etc/escam/temp/');
 		p2.exitCode();
 	}
 
 	public static function install(pkg:{mirror:String, pkg:String, ver:String}) {
-		var p1 = new Process('unzip /${pkg.pkg}-${pkg.ver}.zip -d /');
-		p1.exitCode();
-		var p2 = new Process('rm /${pkg.pkg}-${pkg.ver}.zip');
+		FileSystem.createDirectory('/etc/escam/temp/${pkg.pkg}');
+		// var p1 = new Process('unzip -o -qq /etc/escam/temp/${pkg.pkg}-${pkg.ver}.zip -d /etc/escam/temp/${pkg.pkg}');
+		// p1.exitCode();
+		Sys.command('unzip -o -qq /etc/escam/temp/${pkg.pkg}-${pkg.ver}.zip -d /etc/escam/temp/${pkg.pkg}');
+		var p2 = new Process('rm /etc/escam/temp/${pkg.pkg}-${pkg.ver}.zip');
 		p2.exitCode();
 
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".dat"]);
@@ -72,8 +74,32 @@ class Downloader {
 		}
 		req.request();
 
+		for (file in dat.files) {
+			if (FileSystem.exists(file)) {
+				Sys.println("ERROR: File exists: " + file);
+				return;
+			}
+		}
+		for (dir in dat.dirs) {
+			if (FileSystem.exists(dir)) {
+				Sys.println("ERROR: Directory exists: " + dir);
+				return;
+			}
+		}
+
+		for (file in dat.files) {
+			var p3 = new Process('cp /etc/escam/temp/${pkg.pkg}$file $file');
+			p3.exitCode();
+		}
+		for (dir in dat.dirs) {
+			var p3 = new Process('cp -r /etc/escam/temp/${pkg.pkg}$dir $dir');
+			p3.exitCode();
+		}
+
 		File.saveContent('/etc/escam/packages/${pkg.pkg}.dat', Json.stringify(dat));
 
 		Database.addPackage(pkg);
+
+		Sys.command('rm -r /etc/escam/temp/${pkg.pkg}');
 	}
 }
