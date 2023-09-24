@@ -1,15 +1,19 @@
 {
-    "name": "escam",
-    "version": "0.8.0",
-    "scripts":{
-        "prepare": "./prepare.sh",
-        "build": "haxe build.hxml"
+  "name": "escam",
+  "version": "0.8.1",
+  "scripts": {
+    "prepare": "./prepare.sh",
+    "build": "haxe build.hxml"
+  },
+  "outfile": "./bin/Main",
+  "dependencies": [
+    {
+      "name": "haxe",
+      "version": ">=4"
     },
-    "outfile": "./bin/Main",
-    "dependencies": [
-        {
-            "name": "haxe",
-            "version": ">=4"
-        }
-    ]
+    {
+      "name": "unzip",
+      "version": "*"
+    }
+  ]
 }
