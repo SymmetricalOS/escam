@@ -57,9 +57,13 @@ class Downloader {
 
 	public static function get(pkg:{mirror:String, pkg:String, ver:String}) {
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".zip"]);
+
 		var p1 = new Process('wget $url');
+
 		p1.exitCode();
+
 		var p2 = new Process('mv ${pkg.pkg}-${pkg.ver}.zip /etc/escam/temp/');
+
 		p2.exitCode();
 	}
 

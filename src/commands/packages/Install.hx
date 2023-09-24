@@ -26,15 +26,24 @@ class Install implements Command {
 		packages.shift();
 
 		var list = [];
+
 		for (pkg in packages) {
 			var p = Downloader.check(pkg);
+
 			if (p == null) {
 				Sys.println('ERROR: $pkg not found');
 			} else {
 				list.push(p);
+
 				var deps = Downloader.getDepends(p);
+
 				for (dep in deps) {
-					list.push(Downloader.check(dep));
+					var d = Downloader.check(dep);
+					if (d == null) {
+						Sys.println('ERROR: $dep not found');
+						return;
+					}
+					list.push(d);
 				}
 			}
 		}
@@ -45,6 +54,7 @@ class Install implements Command {
 		for (pkg in list) {
 			Sys.print('${pkg.pkg}-${pkg.ver} ');
 		}
+
 		Sys.print("\r\n\r\nProceed with installation? [Y/n] ");
 		var confirm = Sys.stdin().readLine();
 		if (!confirm.toLowerCase().contains("y") && confirm.toLowerCase().length > 0)
