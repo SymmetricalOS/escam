@@ -39,10 +39,13 @@ class Install implements Command {
 
 				for (dep in deps) {
 					var d = Downloader.check(dep);
+
 					if (d == null) {
 						Sys.println('ERROR: $dep not found');
+
 						return;
 					}
+
 					list.push(d);
 				}
 			}

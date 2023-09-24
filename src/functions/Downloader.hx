@@ -38,19 +38,41 @@ class Downloader {
 		var depends = [];
 
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".dat"]);
+
 		var req = new Http(url);
+
 		var dat:{
 			depends:Array<String>,
 			rejects:Array<String>,
 			files:Array<String>,
 			dirs:Array<String>
 		};
+
 		req.onData = function(data:String) {
 			dat = Json.parse(data);
 		}
+
 		req.request();
 
-		depends = dat.depends;
+		if (dat != null) {
+			depends = dat.depends;
+		}
+
+		for (depend in depends) {
+			var d = Downloader.check(depend);
+
+			if (d == null) {
+				depends.push(null);
+
+				continue;
+			}
+
+			var ndeps = getDepends(d);
+
+			for (ndep in ndeps) {
+				depends.push(ndep);
+			}
+		}
 
 		return depends;
 	}
