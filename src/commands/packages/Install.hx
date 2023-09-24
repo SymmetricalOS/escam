@@ -32,6 +32,10 @@ class Install implements Command {
 				Sys.println('ERROR: $pkg not found');
 			} else {
 				list.push(p);
+				var deps = Downloader.getDepends(p);
+				for (dep in deps) {
+					list.push(Downloader.check(dep));
+				}
 			}
 		}
 

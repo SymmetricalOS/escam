@@ -39,7 +39,12 @@ class Downloader {
 
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".dat"]);
 		var req = new Http(url);
-		var dat:{depends:Array<String>, files:Array<String>, dirs:Array<String>};
+		var dat:{
+			depends:Array<String>,
+			rejects:Array<String>,
+			files:Array<String>,
+			dirs:Array<String>
+		};
 		req.onData = function(data:String) {
 			dat = Json.parse(data);
 		}
