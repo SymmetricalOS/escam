@@ -41,6 +41,9 @@ class Database {
 		if (!FileSystem.exists("/etc/escam/pkglist")) {
 			File.saveContent("/etc/escam/pkglist", "escam=" + Main.version);
 		}
+		if (!FileSystem.exists("/etc/escam/packages/escam.dat")) {
+			File.saveContent("/etc/escam/packages/escam.dat", '{"depends":["unzip"],"files":["/usr/bin/escam"],"dirs":[]}');
+		}
 	}
 
 	public static function get():structs.Database {
