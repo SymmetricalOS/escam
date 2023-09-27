@@ -47,6 +47,8 @@ class Main {
 				Commands.execute(new InitRepository());
 			case "host-repository":
 				Commands.execute(new HostRepository());
+			case "target", "t":
+				Commands.execute(new Target());
 			default:
 				var o = args[0].split("");
 				for (d in o) {

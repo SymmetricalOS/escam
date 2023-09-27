@@ -89,7 +89,33 @@ class Downloader {
 		p2.exitCode();
 	}
 
-	public static function install(pkg:{mirror:String, pkg:String, ver:String}) {
+	public static function install(pkg:{mirror:String, pkg:String, ver:String}, ?t:String = "") {
+		var tld = Path.removeTrailingSlashes(t);
+		if (t != "") {
+			FileSystem.createDirectory('$tld/dev');
+			FileSystem.createDirectory('$tld/etc');
+			FileSystem.createDirectory('$tld/home');
+			FileSystem.createDirectory('$tld/mnt');
+			FileSystem.createDirectory('$tld/opt');
+			FileSystem.createDirectory('$tld/proc');
+			FileSystem.createDirectory('$tld/root');
+			FileSystem.createDirectory('$tld/run');
+			FileSystem.createDirectory('$tld/srv');
+			FileSystem.createDirectory('$tld/sys');
+			FileSystem.createDirectory('$tld/tmp');
+			FileSystem.createDirectory('$tld/usr/bin');
+			FileSystem.createDirectory('$tld/usr/man');
+			FileSystem.createDirectory('$tld/usr/lib');
+			FileSystem.createDirectory('$tld/usr/local');
+			FileSystem.createDirectory('$tld/usr/share');
+			FileSystem.createDirectory('$tld/var/log');
+			FileSystem.createDirectory('$tld/var/lock');
+			FileSystem.createDirectory('$tld/var/tmp');
+			Sys.command('ln -s $tld/usr/bin $tld/bin');
+			Sys.command('ln -s $tld/usr/lib $tld/lib');
+			Sys.command('ln -s $tld/usr/lib $tld/lib64');
+			Sys.command('ln -s $tld/usr/bin $tld/sbin');
+		}
 		FileSystem.createDirectory('/etc/escam/temp/${pkg.pkg}');
 		// var p1 = new Process('unzip -o -qq /etc/escam/temp/${pkg.pkg}-${pkg.ver}.zip -d /etc/escam/temp/${pkg.pkg}');
 		// p1.exitCode();
@@ -106,24 +132,29 @@ class Downloader {
 		req.request();
 
 		for (file in dat.files) {
-			if (FileSystem.exists(file)) {
+			if (FileSystem.exists(tld + file)) {
 				Sys.println("ERROR: File exists: " + file);
 				return;
 			}
 		}
 		for (dir in dat.dirs) {
-			if (FileSystem.exists(dir)) {
+			if (FileSystem.exists(tld + dir)) {
 				Sys.println("ERROR: Directory exists: " + dir);
 				return;
 			}
 		}
 
 		for (file in dat.files) {
-			var p3 = new Process('cp /etc/escam/temp/${pkg.pkg}$file $file');
+			var d = file.split("/");
+			d.pop();
+			var ds = "/" + d.join("/");
+			var p3 = new Process('mkdir -p $tld$ds');
 			p3.exitCode();
+			var p4 = new Process('cp /etc/escam/temp/${pkg.pkg}$file $tld$file');
+			p4.exitCode();
 		}
 		for (dir in dat.dirs) {
-			var p3 = new Process('cp -r /etc/escam/temp/${pkg.pkg}$dir $dir');
+			var p3 = new Process('cp -r /etc/escam/temp/${pkg.pkg}$dir $tld$dir');
 			p3.exitCode();
 		}
 
