@@ -97,9 +97,11 @@ class Downloader {
 		var p2 = new Process('mv ${pkg.pkg}-${pkg.ver}.install /etc/escam/temp/');
 		p2.exitCode();
 
-		var p3 = new Process('chmod +x /etc/escam/temp/${pkg.pkg}-${pkg.ver}.install');
-		p3.exitCode();
-		Sys.command('/etc/escam/temp/${pkg.pkg}-${pkg.ver}.install $script');
+		if (FileSystem.exists('/etc/escam/temp/${pkg.pkg}-${pkg.ver}.install')) {
+			var p3 = new Process('chmod +x /etc/escam/temp/${pkg.pkg}-${pkg.ver}.install');
+			p3.exitCode();
+			Sys.command('/etc/escam/temp/${pkg.pkg}-${pkg.ver}.install $script');
+		}
 	}
 
 	public static function install(pkg:{mirror:String, pkg:String, ver:String}, ?t:String = "") {
