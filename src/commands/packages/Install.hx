@@ -73,11 +73,29 @@ class Install implements Command {
 
 		cp = 0;
 		tp = list.length;
+		Sys.println("\r\n:: Running pre-install scripts");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) ${pkg.pkg}');
+			Downloader.run(pkg, "pre_install");
+		}
+
+		cp = 0;
+		tp = list.length;
 		Sys.println("\r\n:: Installing packages");
 		for (pkg in list) {
 			cp++;
 			Sys.println('($cp/$tp) Installing ${pkg.pkg}');
 			Downloader.install(pkg);
+		}
+
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Running post-install scripts");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) ${pkg.pkg}');
+			Downloader.run(pkg, "post_install");
 		}
 
 		// var summary = [];

@@ -1,5 +1,6 @@
 package commands.packages;
 
+import functions.Downloader;
 import sys.io.Process;
 import sys.FileSystem;
 import haxe.io.Path;
@@ -38,6 +39,17 @@ class Remove implements Command {
 		if (!confirm.toLowerCase().contains("y") && confirm.toLowerCase().length > 0)
 			return;
 
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Running pre-remove scripts");
+		for (p in list) {
+			var pkg = Downloader.check(p);
+			cp++;
+			Sys.println('($cp/$tp) ${pkg.pkg}');
+			Downloader.run(pkg, "pre_remove");
+		}
+
+		cp = 0;
 		tp = packages.length;
 		for (pkg in packages) {
 			cp++;
@@ -61,6 +73,16 @@ class Remove implements Command {
 				Sys.println('($sc/$st) Removing directory $dir');
 				var p1 = new Process('rm -r $dir');
 				p1.exitCode();
+			}
+
+			cp = 0;
+			tp = list.length;
+			Sys.println("\r\n:: Running post-remove scripts");
+			for (p in list) {
+				var pkg = Downloader.check(p);
+				cp++;
+				Sys.println('($cp/$tp) ${pkg.pkg}');
+				Downloader.run(pkg, "post_remove");
 			}
 
 			Database.removePackage(pkg);

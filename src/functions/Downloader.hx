@@ -89,6 +89,19 @@ class Downloader {
 		p2.exitCode();
 	}
 
+	public static function run(pkg:{mirror:String, pkg:String, ver:String}, script:String) {
+		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "-" + pkg.ver + ".install"]);
+
+		var p1 = new Process('wget $url');
+		p1.exitCode();
+		var p2 = new Process('mv ${pkg.pkg}-${pkg.ver}.install /etc/escam/temp/');
+		p2.exitCode();
+
+		var p3 = new Process('chmod +x /etc/escam/temp/${pkg.pkg}-${pkg.ver}.install');
+		p3.exitCode();
+		Sys.command('/etc/escam/temp/${pkg.pkg}-${pkg.ver}.install $script');
+	}
+
 	public static function install(pkg:{mirror:String, pkg:String, ver:String}, ?t:String = "") {
 		var tld = Path.removeTrailingSlashes(t);
 		if (t != "") {

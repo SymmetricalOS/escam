@@ -39,6 +39,15 @@ class Update implements Command {
 
 		cp = 0;
 		tp = list.length;
+		Sys.println("\r\n:: Running pre-upgrade scripts");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) ${pkg.pkg}');
+			Downloader.run(pkg, "pre_upgrade");
+		}
+
+		cp = 0;
+		tp = list.length;
 		Sys.println("\r\n:: Removing old packages");
 		for (pkg in list) {
 			cp++;
@@ -72,6 +81,15 @@ class Update implements Command {
 			cp++;
 			Sys.println('($cp/$tp) Installing ${pkg.pkg}');
 			Downloader.install(pkg);
+		}
+
+		cp = 0;
+		tp = list.length;
+		Sys.println("\r\n:: Running post-upgrade scripts");
+		for (pkg in list) {
+			cp++;
+			Sys.println('($cp/$tp) ${pkg.pkg}');
+			Downloader.run(pkg, "post_upgrade");
 		}
 
 		// var summary = [];
