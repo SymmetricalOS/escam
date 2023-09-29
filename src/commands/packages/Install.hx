@@ -24,7 +24,6 @@ class Install implements Command {
 	public function bind(args:Array<String>) {
 		var packages = args;
 		packages.shift();
-
 		var list = [];
 
 		for (pkg in packages) {
@@ -50,6 +49,8 @@ class Install implements Command {
 				}
 			}
 		}
+
+		trace(list);
 
 		if (list.length == 0)
 			return;

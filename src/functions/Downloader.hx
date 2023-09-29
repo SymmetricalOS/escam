@@ -22,7 +22,7 @@ class Downloader {
 			if (!repo.startsWith("##ESCAM_REPO"))
 				continue;
 			for (p in repo.split("\n")) {
-				if (p.startsWith(pkg)) {
+				if (p.startsWith(pkg + "=")) {
 					return {
 						mirror: mirror,
 						pkg: pkg,
