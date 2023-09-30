@@ -1,5 +1,7 @@
 package functions;
 
+import structs.Package;
+import structs.Dat;
 import sys.io.File;
 import sys.FileSystem;
 import haxe.Json;
@@ -12,7 +14,7 @@ using StringTools;
 class Downloader {
 	private static var scanned = [];
 
-	public static function check(pkg:String):Null<{mirror:String, pkg:String, ver:String}> {
+	public static function check(pkg:String):Null<Package> {
 		for (mirror in Mirrors.mirrors) {
 			var url = Path.join([mirror.replace("$arch", "x86_64"), "repo.db"]);
 			var req = new Http(url);
@@ -36,7 +38,7 @@ class Downloader {
 		return null;
 	}
 
-	public static function getDepends(pkg:{mirror:String, pkg:String, ver:String}, ?s:Array<String> = null):Array<String> {
+	public static function getDepends(pkg:Package, ?s:Array<String> = null):Array<String> {
 		var depends = [];
 		if (s == null)
 			scanned = [];
@@ -49,12 +51,7 @@ class Downloader {
 
 		var req = new Http(url);
 
-		var dat:{
-			depends:Array<String>,
-			rejects:Array<String>,
-			files:Array<String>,
-			dirs:Array<String>
-		};
+		var dat:Dat;
 
 		req.onData = function(data:String) {
 			dat = Json.parse(data);
@@ -88,7 +85,7 @@ class Downloader {
 		return depends;
 	}
 
-	public static function get(pkg:{mirror:String, pkg:String, ver:String}) {
+	public static function get(pkg:Package) {
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "--" + pkg.ver + ".zip"]);
 
 		var p1 = new Process('wget $url');
@@ -100,7 +97,7 @@ class Downloader {
 		p2.exitCode();
 	}
 
-	public static function run(pkg:{mirror:String, pkg:String, ver:String}, script:String) {
+	public static function run(pkg:Package, script:String) {
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "--" + pkg.ver + ".install"]);
 
 		var p1 = new Process('wget $url');
@@ -115,7 +112,7 @@ class Downloader {
 		}
 	}
 
-	public static function install(pkg:{mirror:String, pkg:String, ver:String}, ?t:String = "") {
+	public static function install(pkg:Package, ?t:String = "") {
 		var tld = Path.removeTrailingSlashes(t);
 		if (t != "") {
 			FileSystem.createDirectory('$tld/dev');
@@ -151,7 +148,7 @@ class Downloader {
 
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "--" + pkg.ver + ".dat"]);
 		var req = new Http(url);
-		var dat:{depends:Array<String>, files:Array<String>, dirs:Array<String>};
+		var dat:Dat;
 		req.onData = function(data:String) {
 			dat = Json.parse(data);
 		}
