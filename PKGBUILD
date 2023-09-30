@@ -1,13 +1,13 @@
 # Maintainer: SidGames5 <sidgamessendmestuff@gmail.com>
 pkgname='escam'
-pkgver='0.9.0'
+pkgver='0.9.1'
 pkgrel=1
 epoch=
 pkgdesc="Extremely simple command-line app manager"
 arch=('x86_64')
 url="https://github.com/SymmetricalOS/escam"
 license=('GPL-3')
-depends=('unzip')
+depends=('unzip' 'wget')
 makedepends=('haxe>=4')
 backup=('etc/escam/database.json')
 source=("$url/archive/refs/tags/$pkgver.tar.gz")
