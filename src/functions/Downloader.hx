@@ -86,7 +86,7 @@ class Downloader {
 
 			for (ndep in ndeps) {
 				depends.push(ndep);
-				trace(ndep)
+				trace(ndep);
 			}
 		}
 
