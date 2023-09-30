@@ -67,18 +67,14 @@ class Downloader {
 				if (!scanned.contains(dep)) {
 					depends.push(dep.split("<=")[0].split(">=")[0].split("<")[0].split(">")[0].split("=")[0]);
 					scanned.push(dep);
-					trace(dep);
 				}
 			}
 		}
 
 		for (depend in depends) {
 			var d = Downloader.check(depend);
-			trace(d);
 
 			if (d == null) {
-				depends.push(null);
-
 				continue;
 			}
 
@@ -86,7 +82,6 @@ class Downloader {
 
 			for (ndep in ndeps) {
 				depends.push(ndep);
-				trace(ndep);
 			}
 		}
 

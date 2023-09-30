@@ -28,6 +28,7 @@ class Target implements Command {
 
 		var list = [];
 
+		Sys.println(":: Scanning dependencies (this might take a while)");
 		for (pkg in packages) {
 			var p = Downloader.check(pkg);
 
