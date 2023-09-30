@@ -10,6 +10,8 @@ import haxe.io.Path;
 using StringTools;
 
 class Downloader {
+	private static var scanned = [];
+
 	public static function check(pkg:String):Null<{mirror:String, pkg:String, ver:String}> {
 		for (mirror in Mirrors.mirrors) {
 			var url = Path.join([mirror.replace("$arch", "x86_64"), "repo.db"]);
@@ -34,8 +36,14 @@ class Downloader {
 		return null;
 	}
 
-	public static function getDepends(pkg:{mirror:String, pkg:String, ver:String}):Array<String> {
+	public static function getDepends(pkg:{mirror:String, pkg:String, ver:String}, ?s:Array<String> = null):Array<String> {
 		var depends = [];
+		if (s == null)
+			scanned = [];
+
+		// if (s != null)
+		// 	for (a in s)
+		// 		scanned.push(a);
 
 		var url = Path.join([pkg.mirror.replace("$arch", "x86_64"), pkg.pkg + "--" + pkg.ver + ".dat"]);
 
@@ -56,7 +64,11 @@ class Downloader {
 
 		if (dat != null) {
 			for (dep in dat.depends) {
-				depends.push(dep.split("<=")[0].split(">=")[0].split("<")[0].split(">")[0].split("=")[0]);
+				if (!scanned.contains(dep)) {
+					depends.push(dep.split("<=")[0].split(">=")[0].split("<")[0].split(">")[0].split("=")[0]);
+					scanned.push(dep);
+					trace(dep);
+				}
 			}
 		}
 
@@ -69,7 +81,7 @@ class Downloader {
 				continue;
 			}
 
-			var ndeps = getDepends(d);
+			var ndeps = getDepends(d, scanned);
 
 			for (ndep in ndeps) {
 				depends.push(ndep);

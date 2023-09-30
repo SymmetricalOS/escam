@@ -50,8 +50,6 @@ class Install implements Command {
 			}
 		}
 
-		trace(list);
-
 		if (list.length == 0)
 			return;
 		Sys.print('Packages to install (${list.length}): ');
