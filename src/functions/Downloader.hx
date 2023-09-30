@@ -74,6 +74,7 @@ class Downloader {
 
 		for (depend in depends) {
 			var d = Downloader.check(depend);
+			trace(d)
 
 			if (d == null) {
 				depends.push(null);
@@ -85,6 +86,7 @@ class Downloader {
 
 			for (ndep in ndeps) {
 				depends.push(ndep);
+				trace(ndep)
 			}
 		}
 
