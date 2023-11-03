@@ -9,5 +9,9 @@ class Install {
         }
     }
 
-    public static function updateDb(pkg:String) {}
+    public static function updateDb(pkg:String) {
+        FileSystem.createDirectory('/var/lib/escam/packages/$pkg');
+        Sys.command('cp /tmp/escam/downloaded/$pkg/pkginfo /var/lib/escam/packages/$pkg/pkginfo');
+        Sys.command('cp /tmp/escam/downloaded/$pkg/pkgfiles /var/lib/escam/packages/$pkg/pkgfiles');
+    }
 }
